@@ -1,6 +1,7 @@
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.keys import Keys
+from bs4 import BeautifulSoup
 import subprocess
 import chromedriver_autoinstaller
 import pyperclip
@@ -21,6 +22,7 @@ except:
     driver = webdriver.Chrome(f'./{chrome_ver}/chromedriver.exe', options=option)
 driver.implicitly_wait(20)
 
+#콘솔입력
 print("enter your ID")
 id = input()
 print("enter your PWD")
@@ -29,6 +31,7 @@ pw = input()
 # 네이버 로그인
 # 1. 네이버 이동
 driver.get('https://www.naver.com')
+bsObject = BeautifulSoup(html, "html.parser")
 
 # 2. 로그인 버튼 클릭
 elem = driver.find_element_by_class_name('link_login')
@@ -53,3 +56,5 @@ driver.find_element_by_id('log.login').click()
 
 # 6. 이벤트 페이지 이동
 driver.get('https://event2.pay.naver.com/event/benefit/list')
+
+# 7. 인자비교
