@@ -1,12 +1,17 @@
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.keys import Keys
-from bs4 import BeautifulSoup
+
 import subprocess
 import chromedriver_autoinstaller
 import pyperclip
+import pyautogui
 import time
 
+"""
+chromedriver.exe를 사용해서 작동 수행해야하므로 현재 버전에 맞는 chromedriver.exe 자동으로 받게끔 함
+또한 debuggeraddress를 사용해서 테스트 모드 아닌 일반 크롬창에서의 동작 수행
+"""
 try:
     subprocess.Popen(r'C:\Program Files\Google\Chrome\Application\chrome.exe --remote-debugging-port=9222 --user-data-dir="C:\chrometemp1"')  # 디버거 크롬 구동
 except:
@@ -28,10 +33,8 @@ id = input()
 print("enter your PWD")
 pw = input()
 
-# 네이버 로그인
 # 1. 네이버 이동
 driver.get('https://www.naver.com')
-bsObject = BeautifulSoup(html, "html.parser")
 
 # 2. 로그인 버튼 클릭
 elem = driver.find_element_by_class_name('link_login')
@@ -57,4 +60,22 @@ driver.find_element_by_id('log.login').click()
 # 6. 이벤트 페이지 이동
 driver.get('https://event2.pay.naver.com/event/benefit/list')
 
-# 7. 인자비교
+# 7. 클릭적립은 container 최상위 표시되는 li에 있으므로 for문으로 전부 클릭
+for i in range(1, 16):
+    driver.find_element_by_xpath('//*[@id="eventList"]/li['+str(i)+']/a').click()
+    time.sleep(1)
+    try:
+        # driver.switch_to.alert() 안먹힘... 따라서 pyautogui로 엔터를 입력해서 팝업을 닫아버린다
+        pyautogui.press('ENTER')
+        time.sleep(1)
+        driver.switch_to.window(driver.window_handles[1])
+        driver.close()
+        time.sleep(1)
+        driver.switch_to.window(driver.window_handles[0])
+    except:
+        driver.switch_to.window(driver.window_handles[1])
+        driver.close()
+        time.sleep(1)
+        driver.switch_to.window(driver.window_handles[0])
+
+print("폐지 다 주웠습니다 주인님...")
