@@ -33,7 +33,6 @@ except:
 driver.implicitly_wait(20)
 
 # 콘솔 입력
-
 print("enter your ID")
 id = input()
 print("enter your PWD")
